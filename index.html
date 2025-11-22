@@ -1024,19 +1024,14 @@ document.addEventListener('dragstart', function(e) {
     }
 });
 
-// ===== DATA SENDING TO GOOGLE SHEETS =====
-// ===== DATA SENDING TO GOOGLE SHEETS =====
-// ===== DATA SENDING TO GOOGLE SHEETS =====
-// ===== DATA SENDING TO GOOGLE SHEETS =====
+// ===== ENHANCED DATA SENDING TO GOOGLE SHEETS =====
 function sendAllSubjectsToGoogleSheet(subjData) {
     if (!sheetReady || hasSubmitted) {
-        return; // Prevent multiple submissions
+        console.log("Sheet not ready or already submitted");
+        return;
     }
     
     const url = "https://script.google.com/macros/s/AKfycbx9KHdqtLLFowT4ecmBxDjyEOKDN8sc9lpvnglTkp_fQivHBWsUH-UWI3e2Kizn231kGg/exec";
-    
-    // Debug: Log the incoming subject data
-    console.log("Raw subject data received:", subjData);
     
     // Initialize marks for all subjects
     let mathsMarks = 0, physicsMarks = 0, chemistryMarks = 0, totalMarks = 0;
@@ -1048,7 +1043,7 @@ function sendAllSubjectsToGoogleSheet(subjData) {
         
         console.log(`Processing subject: "${subject}" (lowercase: "${subjectLower}") with marks: ${marks}`);
         
-        if (subjectLower.includes('math') || subjectLower === 'maths') {
+        if (subjectLower.includes('math')) {
             mathsMarks = marks;
             console.log(`Identified as Mathematics: ${marks}`);
         } else if (subjectLower.includes('phys')) {
@@ -1061,12 +1056,18 @@ function sendAllSubjectsToGoogleSheet(subjData) {
         totalMarks += marks;
     }
 
-    // Create payload with ONLY the required fields
+    // Create payload with student info and ALL subject marks
     const payload = {
+        student_name: progress.student.name,
+        section: progress.student.sec,
+        roll_number: progress.student.roll,
+        admission_number: progress.student.adm,
         maths_marks: mathsMarks.toFixed(2),
         physics_marks: physicsMarks.toFixed(2),
         chemistry_marks: chemistryMarks.toFixed(2),
-        total_marks: totalMarks.toFixed(2)
+        total_marks: totalMarks.toFixed(2),
+        exam_date: new Date().toISOString().split('T')[0],
+        exam_time: new Date().toLocaleTimeString()
     };
 
     console.log("Final payload to send:", payload);
@@ -1080,19 +1081,65 @@ function sendAllSubjectsToGoogleSheet(subjData) {
     // Set flag to prevent multiple submissions
     hasSubmitted = true;
     
-    // Send data ONLY when exam is completed
+    // Send data to Google Sheets
     fetch(url, {
         method: "POST",
         body: formData
     })
     .then(response => response.text())
     .then(data => {
-        console.log("✅ Marks saved successfully:", payload);
-        console.log("Sheet response:", data);
+        console.log("✅ All marks saved successfully:", payload);
+        console.log("Google Sheets response:", data);
+        
+        // Show success message to student
+        showSubmissionSuccess(payload);
     })
+    .catch(error => {
+        console.error("❌ Google Sheets Error:", error);
+        alert("There was an issue saving your results. Please contact the administrator.");
+    });
+}
     .catch(error => {
         console.error("❌ Sheet Error:", error);
     });
+}
+
+// 👇 ADD THE HELPER FUNCTION RIGHT HERE 👇
+// Helper function for better subject identification
+function identifySubject(subjectName) {
+    const name = subjectName.toLowerCase().trim();
+    
+    if (name.includes('math') || name === 'maths') {
+        return 'Mathematics';
+    } else if (name.includes('phys')) {
+        return 'Physics';
+    } else if (name.includes('chem')) {
+        return 'Chemistry';
+    }
+    
+    return subjectName; // Return original if no match
+}
+
+// Helper function to get selected options in original paper order
+// Function to show submission success
+function showSubmissionSuccess(payload) {
+    const successMsg = `
+        <div style="background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
+            <h3>✅ Results Successfully Saved!</h3>
+            <p>Your marks have been recorded in the system.</p>
+            <div style="display: inline-block; text-align: left; background: white; padding: 15px; border-radius: 5px; margin: 10px 0;">
+                <strong>Marks Breakdown:</strong><br>
+                Mathematics: ${payload.maths_marks}<br>
+                Physics: ${payload.physics_marks}<br>
+                Chemistry: ${payload.chemistry_marks}<br>
+                <strong>Total: ${payload.total_marks}</strong>
+            </div>
+        </div>
+    `;
+    
+    // Add this message to the summary area
+    const summaryContainer = document.getElementById('summaryTableContainer');
+    summaryContainer.insertAdjacentHTML('beforebegin', successMsg);
 }
 // Helper function to get selected options in original paper order
 
@@ -1384,11 +1431,14 @@ document.addEventListener("visibilitychange", () => {
 });
 
 function submitExam() {
-  if (hasSubmitted) return; // Prevent multiple submissions
-  clearInterval(timerInterval);
-  const subjData = {};
-  examData.subjectNames.forEach((s, i) => {
-    if (!subjData[s]) subjData[s] = {correct: 0, wrong: 0, blank: 0, total: 0, marks: 0};
+    if (hasSubmitted) return; // Prevent multiple submissions
+    clearInterval(timerInterval);
+    const subjData = {};
+    examData.subjectNames.forEach((s, i) => {
+        // 👇 ADD THIS LINE - Use the helper function 👇
+        const subjectName = identifySubject(s);
+        // 👇 CHANGE 's' to 'subjectName' 👇
+        if (!subjData[subjectName]) subjData[subjectName] = {correct: 0, wrong: 0, blank: 0, total: 0, marks: 0};
     const ans = progress.answers[i];
     if (ans === null) {
       subjData[s].blank++;
