@@ -1025,6 +1025,7 @@ document.addEventListener('dragstart', function(e) {
 });
 
 // ===== DATA SENDING TO GOOGLE SHEETS =====
+// ===== DATA SENDING TO GOOGLE SHEETS =====
 function sendAllSubjectsToGoogleSheet(subjData) {
     if (!sheetReady || hasSubmitted) {
         return; // Prevent multiple submissions
@@ -1033,17 +1034,10 @@ function sendAllSubjectsToGoogleSheet(subjData) {
     const url = "https://script.google.com/macros/s/AKfycbx9KHdqtLLFowT4ecmBxDjyEOKDN8sc9lpvnglTkp_fQivHBWsUH-UWI3e2Kizn231kGg/exec";
     
     // Calculate totals and marks
-    let totalCorrect = 0, totalWrong = 0, totalBlank = 0, totalQs = 0, totalMarks = 0;
+    let totalMarks = 0;
     for (let s in subjData) {
-        totalCorrect += subjData[s].correct;
-        totalWrong += subjData[s].wrong;
-        totalBlank += subjData[s].blank;
-        totalQs += subjData[s].total;
         totalMarks += subjData[s].marks;
     }
-
-    // Get selected options in original paper order
-    const originalSelectedOptions = getOriginalOrderSelectedOptions();
 
     const payload = {
         // Student Information
@@ -1053,19 +1047,16 @@ function sendAllSubjectsToGoogleSheet(subjData) {
         adm: progress.student.adm,
         timestamp: new Date().toLocaleString(),
         
-        // Subject Marks Only
-        maths_marks: subjData.Maths?.marks || 0,
-        physics_marks: subjData.Physics?.marks || 0,
-        chemistry_marks: subjData.Chemistry?.marks || 0,
-        total_marks: totalMarks,
-        
-        // Selected options in original paper order
-        selected_options: originalSelectedOptions,
+        // Subject Marks Only - Simplified
+        maths_marks: subjData.Maths?.marks.toFixed(2) || "0.00",
+        physics_marks: subjData.Physics?.marks.toFixed(2) || "0.00", 
+        chemistry_marks: subjData.Chemistry?.marks.toFixed(2) || "0.00",
+        total_marks: totalMarks.toFixed(2),
         
         status: 'Completed'
     };
 
-    console.log("Sending data to Google Sheets:", payload);
+    console.log("Sending simplified data to Google Sheets:", payload);
 
     const formData = new FormData();
     for (const key in payload) {
@@ -1089,21 +1080,7 @@ function sendAllSubjectsToGoogleSheet(subjData) {
         console.error("Sheet Error:", error);
     });
 }
-
 // Helper function to get selected options in original paper order
-function getOriginalOrderSelectedOptions() {
-    const originalOrder = examData.originalOrder;
-    const selectedOptions = [];
-    
-    // Reconstruct answers in original order
-    for (let i = 0; i < originalOrder.length; i++) {
-        const originalIndex = originalOrder[i];
-        const answer = progress.answers[originalIndex];
-        selectedOptions.push(answer || 'N/A');
-    }
-    
-    return selectedOptions.join(', ');
-}
 
 // ===== INITIALIZATION =====
 // Fetch the answer key file from Answers/Key on page load
