@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LFJC Online Exam</title>
+<style>
+/* Your existing CSS styles remain exactly the same */
+/* ===== BASE STYLES ===== */
+:root {
+  --primary-color: #4B0082;
+  --secondary-color: #D8BFD8;
+  --light-purple: #E6E6FA;
+  --white: #fff;
+  --black: #000;
+  --success: #32CD32;
+  --warning: #ff9900;
+  --danger: #ff6666;
+  --shadow: 0 5px 15px rgba(0,0,0,0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "SF Pro Display", Arial, sans-serif;
+  margin: 0;
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.6;
+  /* Disable text selection and right-click */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Disable right-click context menu */
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Enhanced Screenshot protection - IMPROVED */
+#screenshotProtection {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 2147483647;
+  pointer-events: none;
+}
+
+.screenshot-dots {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.02) 1px, transparent 1px),
+    radial-gradient(circle at 30% 40%, rgba(255,255,255,0.02) 1px, transparent 1px),
+    radial-gradient(circle at 50% 60%, rgba(255,255,255,0.02) 1px, transparent 1px),
+    radial-gradient(circle at 70% 80%, rgba(255,255,255,0.02) 1px, transparent 1px),
+    radial-gradient(circle at 90% 10%, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 200px 200px;
+  animation: flicker 0.5s infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.9; }
+}
+
+/* Additional screenshot protection */
+#screenshotBlock {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 2147483646;
+  pointer-events: none;
+}
+
+/* ===== HEADER & FOOTER ===== */
+header {
+  background: linear-gradient(145deg, var(--light-purple), var(--secondary-color));
+  color: var(--primary-color);
+  text-align: center;
+  padding: 20px;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  box-shadow: var(--shadow);
+  text-shadow: 0 1px 2px var(--white);
+}
+
+footer {
+  background: var(--light-purple);
+  color: var(--primary-color);
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+
+/* ===== STUDENT ENTRY SECTION ===== */
+#studentEntry {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 140px);
+  padding: 16px;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.form-group label {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-right: 10px;
+  color: var(--primary-color);
+  width: 180px;
+  text-align: right;
+}
+
+input[type="text"] {
+  padding: 12px 14px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--primary-color);
+  outline: none;
+  min-width: 250px;
+  transition: var(--transition);
+}
+
+input[type="text"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(75, 0, 130, 0.2);
+}
+
+input.error {
+  animation: glowRed 0.5s alternate infinite;
+  border-color: var(--danger);
+}
+
+@keyframes glowRed {
+  0% { box-shadow: 0 0 5px var(--danger); }
+  100% { box-shadow: 0 0 15px var(--danger); }
+}
+
+/* ===== BUTTON STYLES ===== */
+button {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  transition: var(--transition);
+  box-shadow: 0 6px #aaa;
+  background: linear-gradient(to bottom, #fafaff, #dcd6f7);
+  color: var(--primary-color);
+  font-weight: 600;
+  padding: 12px 24px;
+  font-size: 18px;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0,0,0,.28);
+}
+
+button:active {
+  transform: translateY(3px) scale(.98);
+}
+
+button:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.optBtn {
+  font-size: 16px;
+  padding: 8px 18px;
+  margin: 6px;
+  border: 2px solid var(--primary-color);
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 5px #aaa;
+}
+
+.optBtn.selected {
+  background: var(--success);
+  color: var(--white);
+  border-color: #2fa92f;
+}
+
+.optBtn.correct {
+  background: #32CD32;
+  color: white;
+  border-color: #228B22;
+}
+
+.optBtn.wrong {
+  background: #FF6B6B;
+  color: white;
+  border-color: #DC143C;
+}
+
+.optBtn.not-attempted {
+  background: #B0B0B0;
+  color: white;
+  border-color: #808080;
+}
+
+.navBtn {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: var(--white);
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(145deg, #1E90FF, #4682B4);
+  margin: 0 15px; /* Added gap between navigation buttons */
+}
+
+#markReviewBtn {
+  background: linear-gradient(145deg, #ffb84d, var(--warning));
+}
+
+#submitBtn {
+  background: linear-gradient(145deg, #c8b88a, #b49e60);
+}
+
+/* ===== TIMER STYLES ===== */
+#timerEl {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--primary-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #f0f0ff;
+  display: inline-block;
+  transition: var(--transition);
+}
+
+#timerEl.blink {
+  animation: blinkTimer 1s infinite;
+}
+
+@keyframes blinkTimer {
+  0% { background: var(--danger); color: var(--white); }
+  50% { background: var(--white); color: var(--primary-color); }
+  100% { background: var(--danger); color: var(--white); }
+}
+
+/* ===== PALETTE STYLES ===== */
+#paletteContainer {
+  display: grid;
+  gap: 8px;
+  margin: 20px auto;
+  max-width: 100%;
+  padding: 0 10px;
+  justify-content: center;
+}
+
+#paletteContainer button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 14px;
+  margin: 2px;
+  border: 1px solid var(--primary-color);
+  background: var(--light-purple);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#paletteContainer button.selected {
+  background: var(--success);
+  color: var(--white);
+  border-color: #2fa92f;
+}
+
+#paletteContainer button.reviewed {
+  background: yellow;
+  color: var(--black);
+}
+
+#paletteContainer button.current {
+  border: 3px solid red;
+}
+
+#paletteContainer button.correct-answer {
+  background: #32CD32;
+  color: white;
+}
+
+#paletteContainer button.wrong-answer {
+  background: #FF6B6B;
+  color: white;
+}
+
+#paletteContainer button.not-attempted-answer {
+  background: #B0B0B0;
+  color: white;
+}
+
+/* ===== EXAM AREA STYLES ===== */
+#examArea {
+  padding: 16px;
+  text-align: center;
+  display: none;
+}
+
+#examHeader {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+#stuInfo {
+  flex: 0 0 auto;
+  text-align: left;
+  white-space: nowrap;
+}
+
+#stuQInfo {
+  flex: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.sectionTitle {
+  font-size: 22px;
+  color: var(--primary-color);
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+img.questionImg {
+  max-width: 95vw;  /* ← Use viewport width */
+  width: auto;      /* ← Maintain aspect ratio */
+  height: auto;     /* ← Maintain aspect ratio */
+  border-radius: 10px;
+  /* Prevent image dragging and selection */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: opacity 0.3s ease;
+}
+
+/* ===== ANIMATIONS ===== */
+.glow {
+  animation: glowPulse 1.6s infinite alternate;
+  box-shadow: 0 8px 18px rgba(75,0,130,0.12);
+}
+
+@keyframes glowPulse {
+  0% { box-shadow: 0 6px 10px rgba(75,0,130,0.06); transform: translateY(0); }
+  50% { box-shadow: 0 12px 30px rgba(75,0,130,0.14); transform: translateY(-2px); }
+  100% { box-shadow: 0 6px 10px rgba(75,0,130,0.06); transform: translateY(0); }
+}
+
+/* ===== SECURITY OVERLAY STYLES ===== */
+#fullRedOverlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  background: red;
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+#accessDeniedBox {
+  position: fixed;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  color: var(--white);
+  text-align: center;
+  display: none;
+  pointer-events: auto;
+}
+
+#accessDeniedBox h1 {
+  font-size: 48px;
+  font-weight: 900;
+  margin: 0 0 18px 0;
+  color: var(--white);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+#callAdminBtn {
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-weight: 800;
+}
+
+/* ===== MODAL STYLES ===== */
+.confirmModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+}
+
+.confirmBox {
+  background: var(--white);
+  padding: 20px;
+  border-radius: 12px;
+  min-width: 280px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.confirmBox p {
+  font-size: 18px;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.confirmBox button {
+  margin: 0 10px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#adminPassModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 20000;
+}
+
+#adminPassBox {
+  background: var(--white);
+  padding: 20px;
+  text-align: center;
+  width: 260px;
+  border-radius: 12px;
+}
+
+#adminPassBox input {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid var(--primary-color);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* ===== TIMER WARNING STYLES ===== */
+.blinkLine {
+  animation: blinkLineAnim 1s infinite;
+}
+
+@keyframes blinkLineAnim {
+  0% { background: #ffcccc; }
+  50% { background: var(--white); }
+  100% { background: #ffcccc; }
+}
+
+/* ===== FONT SIZE ADJUSTMENTS ===== */
+#stuInfo, #stuQInfo, #timerEl {
+  font-size: 20px !important;
+}
+
+/* Increase table row height vertically */
+table td, table th {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+/* ===== RESPONSIVE STYLES ===== */
+@media (max-width: 600px) {
+  #accessDeniedBox h1 {
+    font-size: 28px;
+  }
+  
+  #callAdminBtn {
+    padding: 10px 14px;
+  }
+  
+  .form-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .form-group label {
+    text-align: left;
+    width: auto;
+    margin-bottom: 5px;
+  }
+  
+  #examHeader {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  #stuInfo, #stuQInfo {
+    text-align: center;
+  }
+  
+  .navContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .navBtn {
+    width: 80%;
+    margin-bottom: 10px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  #paletteContainer {
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 6px;
+  }
+  
+  #paletteContainer button {
+    width: 35px;
+    height: 35px;
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  #paletteContainer {
+    grid-template-columns: repeat(10, 1fr) !important;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1200px) {
+  #paletteContainer {
+    grid-template-columns: repeat(15, 1fr) !important;
+  }
+}
+
+@media (min-width: 1201px) {
+  #paletteContainer {
+    grid-template-columns: repeat(20, 1fr) !important;
+  }
+}
+
+/* ===== ERROR MESSAGE STYLES ===== */
+.error-message {
+  color: #ff3333;
+  font-weight: 600;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+  background: rgba(255, 102, 102, 0.1);
+  border: 1px solid #ff6666;
+  animation: blinkRed 1s infinite;
+}
+
+@keyframes blinkRed {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* ===== RESULTS TABLE STYLES ===== */
+.results-table {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+  border-collapse: collapse;
+  font-size: 18px;
+  text-align: center;
+}
+
+.results-table th {
+  background: #E6E6FA;
+  padding: 15px;
+  border: 1px solid var(--primary-color);
+}
+
+.results-table td {
+  padding: 15px;
+  border: 1px solid var(--primary-color);
+}
+
+.results-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.results-table tr:hover {
+  background: #f0f0ff;
+}
+
+/* ===== REVIEW MODE STYLES ===== */
+.answer-status {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.answer-status.correct {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.answer-status.wrong {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.answer-status.not-attempted {
+  background: #e2e3e5;
+  color: #383d41;
+  border: 1px solid #d6d8db;
+}
+
+.correct-answer {
+  color: #155724;
+  font-weight: bold;
+}
+
+.wrong-answer {
+  color: #721c24;
+  font-weight: bold;
+}
+
+/* ===== AREA STYLES ===== */
+#summaryArea, #reviewArea {
+  display: none;
+  padding: 20px;
+}
+
+.area-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.area-header h2 {
+  color: #4B0082;
+  margin-bottom: 10px;
+}
+
+/* ===== VERTICAL GAP STYLES ===== */
+.options-container {
+  margin-bottom: 60px; /* Increased gap between options and navigation */
+}
+
+.navContainer {
+  margin-top: 40px; /* Additional gap above navigation */
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Added gap between navigation buttons */
+  flex-wrap: wrap;
+}
+
+/* ===== SECURITY MESSAGE STYLES ===== */
+.security-message {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* ===== AUTO TRANSITION STYLES ===== */
+.auto-transition-message {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  text-align: center;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.waiting-message {
+  background: #d1ecf1;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 30px 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.waiting-timer {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4B0082;
+  margin: 10px 0;
+}
+
+/* ===== LOADING STYLES ===== */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.spinner {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #4B0082;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== WARNING BANNER STYLES ===== */
+.warning-banner {
+  background: #ffcccc;
+  color: #721c24;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+/* ===== IMAGE ERROR STYLES ===== */
+.image-error {
+  background: #ffebee;
+  border: 2px solid #ffcdd2;
+  color: #c62828;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+.image-error h3 {
+  margin: 0 0 10px 0;
+  color: #c62828;
+}
+
+.loading-message {
+  background: #e3f2fd;
+  border: 2px solid #bbdefb;
+  color: #1565c0;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* ===== SUCCESS MESSAGE STYLES ===== */
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #c3e6cb;
+}
+
+.success-message h3 {
+  margin: 0 0 10px 0;
+  color: #155724;
+}
+
+/* ===== SMOOTH TRANSITION STYLES ===== */
+.question-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+.question-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== PRELOADING STYLES ===== */
+.preload-image {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  opacity: 0;
+}
+
+/* ===== DETAILED RESULTS TABLE STYLES ===== */
+.detailed-results-table {
+  width: 100%;
+  max-width: 900px;
+  margin: 30px auto;
+  border-collapse: collapse;
+  font-size: 18px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.detailed-results-table th {
+  background: #4B0082;
+  color: white;
+  padding: 18px;
+  border: 1px solid var(--primary-color);
+  font-weight: bold;
+}
+
+.detailed-results-table td {
+  padding: 18px;
+  border: 1px solid var(--primary-color);
+}
+
+.detailed-results-table tr:nth-child(even) {
+  background: #f8f6ff;
+}
+
+.detailed-results-table tr:hover {
+  background: #f0f0ff;
+  transform: scale(1.01);
+  transition: transform 0.2s ease;
+}
+
+.detailed-results-table .total-row {
+  background: #E6E6FA !important;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.detailed-results-table .highlight {
+  background: #d4edda;
+  font-weight: bold;
+}
+
+/* ===== QUEUE STATUS STYLES ===== */
+.queue-status {
+  background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+  border: 2px solid #2196F3;
+  color: #1565c0;
+  padding: 25px;
+  border-radius: 15px;
+  margin: 25px 0;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(33, 150, 243, 0.2);
+}
+
+.queue-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.queue-stat-item {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #bbdefb;
+}
+
+.progress-container {
+  background: #f0f0f0;
+  border-radius: 10px;
+  height: 12px;
+  overflow: hidden;
+  margin: 15px 0;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, #4B0082, #2196F3);
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+</style>
+</head>
+
+<body>
+
+<header>LFJC ONLINE EXAMINATION</header>
+
+<div id="studentEntry">
+  <div class="warning-banner" id="examWarning" style="display:none;">
+    <p>⚠️ WARNING: Exam in progress. Do not refresh or close this window!</p>
+  </div>
+  
+  <div class="form-group"><label>NAME</label><input type="text" id="stuName" placeholder="Only letters & spaces" autocomplete="off"></div>
+  <div class="form-group"><label>SECTION</label><input type="text" id="stuSection" placeholder="Letters & digits" autocomplete="off"></div>
+  <div class="form-group"><label>ROLL NUMBER</label><input type="text" id="stuRoll" placeholder="Digits only" autocomplete="off"></div>
+  <div class="form-group"><label>ADMISSION NUMBER</label><input type="text" id="stuAdm" placeholder="Digits only" autocomplete="off"></div>
+  <div class="form-group"><button id="stuStartBtn" style="display:none;">Start Exam</button></div>
+  <p id="studentMsg"></p>
+  <div id="errorMessages"></div>
+  
+  <div id="resumeExamSection" style="display:none; margin-top: 20px;">
+    <div class="security-message">
+      <p>You have an exam in progress. Would you like to resume?</p>
+      <button id="resumeExamBtn" class="navBtn">Resume Exam</button>
+    </div>
+  </div>
+</div>
+
+<div id="examArea" style="display:none;">
+  <div id="examHeader" style="display:flex;align-items:center;width:100%;font-weight:bold;">
+    <div id="stuInfo" style="flex:0 0 auto;text-align:left; white-space:nowrap;"></div>
+    <div id="stuQInfo" style="flex:1;text-align:center; white-space:nowrap;"></div>
+    <div style="flex:0 0 auto;text-align:right; white-space:nowrap;">
+        <span id="timerEl">🕒 00:00</span>
+    </div>
+  </div>
+
+  <div id="questionContainer" style="text-align:center;margin-top:10px;"></div>
+
+  <div class="navContainer">
+    <button class="navBtn" id="prevBtn">⬅ Previous</button>
+    <button class="navBtn" id="markReviewBtn">Review</button>
+    <button class="navBtn" id="nextBtn">Next ➡</button>
+    <button class="navBtn" id="submitBtn">Submit Exam</button>
+  </div>
+
+  <div id="paletteContainer"></div>
+</div>
+
+<!-- Summary Area -->
+<div id="summaryArea">
+  <div class="area-header">
+    <h2>📊 Exam Summary - <span id="summaryStudentName"></span></h2>
+    <div>
+      <b>Section:</b> <span id="summarySection"></span> | 
+      <b>Roll:</b> <span id="summaryRoll"></span> | 
+      <b>Admission No:</b> <span id="summaryAdm"></span>
+    </div>
+  </div>
+  
+  <div id="summaryTableContainer" style="overflow-x:auto;display:flex;justify-content:center;width:100%;"></div>
+  
+  <!-- Queue Status Section -->
+  <div id="queueStatusSection"></div>
+  
+  <div style="text-align:center; margin:30px 0;">
+    <div id="waitingMessage" class="waiting-message">
+      <div>⏳ Waiting for Exam Time to Complete</div>
+      <div class="waiting-timer" id="waitingTimer">00:00</div>
+      <div>Detailed solutions will be available automatically when the exam time is over.</div>
+    </div>
+    <div id="autoTransitionMessage" class="auto-transition-message" style="display:none;">
+      🔄 Auto-transitioning to detailed solutions in <span id="countdown">5</span> seconds...
+    </div>
+    <button id="closeSummaryBtn" class="navBtn" style="background:linear-gradient(145deg, #dc3545, #c82333);">Close</button>
+  </div>
+</div>
+
+<!-- Review Area -->
+<div id="reviewArea">
+  <div class="area-header">
+    <h2>📝 Detailed Solutions - <span id="reviewStudentName"></span></h2>
+    <div>
+      <b>Section:</b> <span id="reviewSection"></span> | 
+      <b>Roll:</b> <span id="reviewRoll"></span> | 
+      <b>Admission No:</b> <span id="reviewAdm"></span>
+    </div>
+  </div>
+  
+  <!-- Results Table in Detailed Solutions -->
+  <div id="detailedResultsContainer" style="overflow-x:auto;display:flex;justify-content:center;width:100%;margin:30px 0;"></div>
+  
+  <div id="reviewQuestionsContainer"></div>
+  
+  <div style="text-align:center; margin:30px 0;">
+    <button id="closeReviewBtn" class="navBtn" style="background:linear-gradient(145deg, #dc3545, #c82333);">Close</button>
+  </div>
+</div>
+
+<footer>LFJC@2025 All rights reserved</footer>
+
+<div id="fullRedOverlay"></div>
+<div id="accessDeniedBox">
+  <h1>ACCESS DENIED</h1>
+  <button id="callAdminBtn" class="glow">Enter Password</button>
+</div>
+
+<div class="confirmModal" id="confirmModal">
+  <div class="confirmBox">
+    <p id="confirmText">Confirm?</p>
+    <button id="confirmYes">Yes</button>
+    <button id="confirmNo">No</button>
+  </div>
+</div>
+
+<div id="adminPassModal">
+  <div id="adminPassBox">
+    <h3>Enter Admin Password</h3>
+    <input type="password" id="adminPassInput">
+    <br><br>
+    <button id="adminPassSubmit">Submit</button>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminPanel" style="display: none; position: fixed; top: 50%; left: 50%; 
+    transform: translate(-50%, -50%); background: white; padding: 30px; 
+    border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10000;
+    max-width: 95%; max-height: 95%; overflow: auto; border: 3px solid #4B0082;
+    width: 900px;">
+    
+    <h2 style="color: #4B0082; text-align: center; margin-bottom: 10px; font-size: 28px;">
+        📊 CENTRAL EXAM RESULTS ADMIN
+    </h2>
+    <p style="text-align: center; color: #666; margin-bottom: 25px;">
+        All student data stored in one place • Real-time updates
+    </p>
+    
+    <!-- Queue Monitoring -->
+    <div id="queueMonitoringSection" style="background: #fff3cd; border: 2px solid #ffeaa7; 
+                    padding: 20px; border-radius: 10px; margin: 20px 0;">
+        <h4 style="color: #856404; margin-bottom: 15px;">🚦 Real-time Queue Monitor</h4>
+        
+        <div id="liveQueueStats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+                 gap: 15px; margin-bottom: 15px;">
+            <!-- Live stats will appear here -->
+        </div>
+        
+        <div style="text-align: center;">
+            <button onclick="refreshQueueStats()" class="navBtn" style="background: #17a2b8; margin: 5px;">
+                🔄 Refresh Queue Stats
+            </button>
+            <button onclick="forceProcessQueue()" class="navBtn" style="background: #28a745; margin: 5px;">
+                🚀 Force Process Queue
+            </button>
+        </div>
+    </div>
+    
+    <!-- Statistics -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+                gap: 15px; margin-bottom: 25px; text-align: center;">
+        <div style="background: #E6E6FA; padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; font-weight: bold; color: #4B0082;" id="totalStudents">0</div>
+            <div>Total Students</div>
+        </div>
+        <div style="background: #d4edda; padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; font-weight: bold; color: #155724;" id="lastSubmission">-</div>
+            <div>Last Submission</div>
+        </div>
+        <div style="background: #fff3cd; padding: 15px; border-radius: 10px;">
+            <div style="font-size: 24px; font-weight: bold; color: #856404;" id="storageSize">0 KB</div>
+            <div>Storage Used</div>
+        </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div style="text-align: center; margin-bottom: 25px; display: grid; 
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+        <button onclick="exportAllResultsJSON()" class="navBtn" style="background: #28a745;">
+            📥 Export JSON (All Data)
+        </button>
+        <button onclick="exportAllResultsCSV()" class="navBtn" style="background: #17a2b8;">
+            📊 Export CSV (Excel)
+        </button>
+        <button onclick="printAllResults()" class="navBtn" style="background: #6f42c1;">
+            🖨️ Print Results
+        </button>
+        <button onclick="clearAllData()" class="navBtn" style="background: #dc3545;">
+            🗑️ Clear All Data
+        </button>
+        <button onclick="document.getElementById('adminPanel').style.display='none'" 
+                class="navBtn" style="background: #6c757d;">
+            ❌ Close Panel
+        </button>
+    </div>
+    
+    <!-- Real-time Results Table -->
+    <div style="margin-bottom: 20px;">
+        <h3 style="color: #4B0082; margin-bottom: 15px;">📋 All Student Results (Live)</h3>
+        <div id="realTimeTable" style="max-height: 400px; overflow-y: auto; 
+            border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
+        </div>
+    </div>
+</div>
+
+<!-- Admin Access Button -->
+<button id="adminAccessBtn" style="position: fixed; bottom: 20px; right: 20px; 
+    background: #4B0082; color: white; border: none; padding: 15px; 
+    border-radius: 50%; cursor: pointer; z-index: 9999; font-size: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3); width: 60px; height: 60px;" 
+    onclick="showAdminPanel()" title="Admin Panel">
+    ⚙️
+</button>
+
+<!-- Enhanced Screenshot Protection -->
+<div id="screenshotProtection">
+  <div class="screenshot-dots"></div>
+</div>
+<div id="screenshotBlock"></div>
+
+<script>
+// ===== CONFIGURATION =====
+const MARK_PER_CORRECT = 4, MARK_PER_WRONG = -1;
+const EXAM_DURATION_MINUTES = 115;
+const EXAM_DURATION_MS = EXAM_DURATION_MINUTES * 60 * 1000;
+const STORAGE_KEY_PREFIX = "lfjc_exam_";
+const MAX_QUESTIONS = 60;
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzOmyTxYZMUgW1bJzMWCYuTp1RBJ88g0VNn0YUk2syAeGYfcJciQeXCnjP3oZZmZdkOOg/exec";
+
+// ===== GLOBAL VARIABLES =====
+let images = [];
+let answerKey = [];
+let keyLoaded = false;
+let sheetReady = false;
+let hasSubmitted = false;
+let examStartTime = null;
+let waitingTimerInterval = null;
+let autoTransitionTimer = null;
+let examInProgress = false;
+let preloadedImages = {};
+let currentSubjData = null;
+
+const subjects = ["Maths", "Physics", "Chemistry"];
+let examData = {files: [], subjectNames: [], keys: [], originalOrder: []};
+let progress = null, timerInterval = null;
+
+// ===== INTELLIGENT GOOGLE SHEETS QUEUE SYSTEM =====
+class GoogleSheetsQueue {
+    constructor() {
+        this.queue = [];
+        this.isProcessing = false;
+        this.requestsThisMinute = 0;
+        this.lastResetTime = Date.now();
+        this.MAX_REQUESTS_PER_MINUTE = 50;
+        this.totalProcessed = 0;
+        this.totalFailed = 0;
+    }
+
+    addToQueue(studentData) {
+        this.queue.push({
+            data: studentData,
+            attempts: 0,
+            maxAttempts: 3,
+            timestamp: Date.now(),
+            id: `${studentData.roll_number}_${Date.now()}`
+        });
+        
+        console.log(`📝 Added to queue: ${studentData.student_name}. Queue size: ${this.queue.length}`);
+        
+        if (!this.isProcessing) {
+            this.processQueue();
+        }
+        
+        this.updateQueueDisplay();
+    }
+
+    async processQueue() {
+        if (this.isProcessing || this.queue.length === 0) return;
+        
+        this.isProcessing = true;
+        
+        // Reset counter every minute
+        if (Date.now() - this.lastResetTime > 60000) {
+            console.log('🔄 Resetting rate limit counter');
+            this.requestsThisMinute = 0;
+            this.lastResetTime = Date.now();
+        }
+        
+        // Process up to limit
+        const availableSlots = this.MAX_REQUESTS_PER_MINUTE - this.requestsThisMinute;
+        const batchSize = Math.min(availableSlots, this.queue.length, 10);
+        
+        if (batchSize <= 0) {
+            const waitTime = 60000 - (Date.now() - this.lastResetTime) + 1000;
+            console.log(`⏳ Rate limit reached. Waiting ${Math.round(waitTime/1000)} seconds...`);
+            
+            this.updateQueueStatus(`Rate limit reached. Resuming in ${Math.round(waitTime/1000)}s...`);
+            
+            setTimeout(() => {
+                this.isProcessing = false;
+                this.processQueue();
+            }, waitTime);
+            return;
+        }
+
+        console.log(`🔄 Processing batch of ${batchSize} submissions`);
+        this.updateQueueStatus(`Processing ${batchSize} submissions...`);
+        
+        const batch = this.queue.splice(0, batchSize);
+        let completed = 0;
+
+        for (const item of batch) {
+            await this.delay(1000 + Math.random() * 2000);
+            
+            try {
+                const success = await this.submitToSheets(item.data);
+                if (success) {
+                    this.requestsThisMinute++;
+                    this.totalProcessed++;
+                    completed++;
+                    console.log(`✅ Sheets submission successful: ${item.data.student_name}`);
+                    this.markAsSubmitted(item.data, 'google_sheets');
+                } else {
+                    item.attempts++;
+                    if (item.attempts < item.maxAttempts) {
+                        this.queue.push(item);
+                        console.log(`🔄 Will retry: ${item.data.student_name} (attempt ${item.attempts})`);
+                    } else {
+                        console.log(`❌ Final failure: ${item.data.student_name}`);
+                        this.totalFailed++;
+                        this.saveToLocalStorage(item.data);
+                        this.markAsSubmitted(item.data, 'local_storage');
+                    }
+                }
+            } catch (error) {
+                console.error(`❌ Submission error: ${error}`);
+                this.totalFailed++;
+                this.saveToLocalStorage(item.data);
+                this.markAsSubmitted(item.data, 'local_storage');
+            }
+            
+            this.updateProgress(completed, batchSize);
+            this.updateQueueDisplay();
+        }
+
+        console.log(`✅ Batch completed. ${this.queue.length} remaining in queue`);
+        this.isProcessing = false;
+        
+        if (this.queue.length > 0) {
+            setTimeout(() => this.processQueue(), 2000);
+        } else {
+            this.updateQueueStatus('All submissions processed!');
+            console.log(`🎉 Queue empty! Total: ${this.totalProcessed} successful, ${this.totalFailed} failed`);
+        }
+    }
+
+    async submitToSheets(studentData) {
+        try {
+            const formData = new FormData();
+            formData.append('student_name', studentData.student_name);
+            formData.append('section', studentData.section);
+            formData.append('roll_number', studentData.roll_number);
+            formData.append('admission_number', studentData.admission_number);
+            formData.append('maths_marks', studentData.maths_marks);
+            formData.append('physics_marks', studentData.physics_marks);
+            formData.append('chemistry_marks', studentData.chemistry_marks);
+            formData.append('total_marks', studentData.total_marks);
+            formData.append('exam_time', studentData.exam_time);
+            formData.append('timestamp', studentData.timestamp);
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                body: formData,
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const result = await response.text();
+            console.log('Sheets response:', result);
+            return true;
+            
+        } catch (error) {
+            console.error('Sheets submission error:', error);
+            return false;
+        }
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    updateProgress(completed, total) {
+        const progress = (completed / total) * 100;
+        if (typeof window.updateSubmissionProgress === 'function') {
+            window.updateSubmissionProgress(progress);
+        }
+    }
+
+    saveToLocalStorage(studentData) {
+        const allResults = JSON.parse(localStorage.getItem('CENTRAL_EXAM_RESULTS')) || [];
+        const existingIndex = allResults.findIndex(result => 
+            result.roll_number === studentData.roll_number
+        );
+        
+        if (existingIndex !== -1) {
+            allResults[existingIndex] = {...studentData, submission_method: 'local_fallback'};
+        } else {
+            allResults.push({...studentData, submission_method: 'local_fallback'});
+        }
+        
+        localStorage.setItem('CENTRAL_EXAM_RESULTS', JSON.stringify(allResults));
+        console.log('💾 Saved to local storage as fallback');
+    }
+
+    markAsSubmitted(studentData, method) {
+        const allResults = JSON.parse(localStorage.getItem('CENTRAL_EXAM_RESULTS')) || [];
+        const studentIndex = allResults.findIndex(result => 
+            result.roll_number === studentData.roll_number
+        );
+        
+        if (studentIndex !== -1) {
+            allResults[studentIndex].submission_method = method;
+            allResults[studentIndex].submission_status = method === 'google_sheets' ? 'success' : 'local_only';
+            allResults[studentIndex].processed_at = new Date().toISOString();
+            localStorage.setItem('CENTRAL_EXAM_RESULTS', JSON.stringify(allResults));
+        }
+    }
+
+    updateQueueDisplay() {
+        const queueInfo = document.getElementById('queueInfo');
+        if (queueInfo) {
+            queueInfo.innerHTML = `
+                <div style="font-size: 14px; margin-top: 10px;">
+                    <div>📊 Queue Status: ${this.queue.length} pending</div>
+                    <div>✅ Successful: ${this.totalProcessed}</div>
+                    <div>❌ Failed: ${this.totalFailed}</div>
+                    <div>⏳ Rate Limit: ${this.requestsThisMinute}/${this.MAX_REQUESTS_PER_MINUTE} per minute</div>
+                </div>
+            `;
+        }
+    }
+
+    updateQueueStatus(message) {
+        const statusElement = document.getElementById('queueStatus');
+        if (statusElement) {
+            statusElement.textContent = message;
+        }
+    }
+
+    getQueueStats() {
+        return {
+            queueLength: this.queue.length,
+            totalProcessed: this.totalProcessed,
+            totalFailed: this.totalFailed,
+            isProcessing: this.isProcessing,
+            requestsThisMinute: this.requestsThisMinute
+        };
+    }
+}
+
+// Initialize the queue
+const sheetsQueue = new GoogleSheetsQueue();
+
+// ===== ENHANCED SUBMISSION FUNCTION =====
+function sendAllSubjectsToGoogleSheet(subjData) {
+    if (hasSubmitted) {
+        console.log('Already submitted, skipping');
+        return;
+    }
+    
+    let mathsMarks = 0, physicsMarks = 0, chemistryMarks = 0, totalMarks = 0;
+    for (let subject in subjData) {
+        const subjectLower = subject.toLowerCase().trim();
+        const marks = subjData[subject].marks;
+        if (subjectLower.includes('math')) mathsMarks = marks;
+        else if (subjectLower.includes('phys')) physicsMarks = marks;
+        else if (subjectLower.includes('chem')) chemistryMarks = marks;
+        totalMarks += marks;
+    }
+
+    const studentResult = {
+        student_name: progress.student.name,
+        section: progress.student.sec,
+        roll_number: progress.student.roll,
+        admission_number: progress.student.adm,
+        maths_marks: parseFloat(mathsMarks.toFixed(2)),
+        physics_marks: parseFloat(physicsMarks.toFixed(2)),
+        chemistry_marks: parseFloat(chemistryMarks.toFixed(2)),
+        total_marks: parseFloat(totalMarks.toFixed(2)),
+        exam_time: new Date().toLocaleTimeString(),
+        timestamp: new Date().toISOString(),
+        submitted_at: new Date().toISOString()
+    };
+
+    hasSubmitted = true;
+    
+    saveToCentralStorage(studentResult);
+    sheetsQueue.addToQueue(studentResult);
+    showQueueStatus(studentResult);
+}
+
+function saveToCentralStorage(studentResult) {
+    try {
+        const allResults = JSON.parse(localStorage.getItem('CENTRAL_EXAM_RESULTS')) || [];
+        const existingIndex = allResults.findIndex(result => 
+            result.roll_number === studentResult.roll_number
+        );
+        
+        if (existingIndex !== -1) {
+            allResults[existingIndex] = {...studentResult, storage_status: 'updated'};
+        } else {
+            allResults.push({...studentResult, storage_status: 'new'});
+        }
+        
+        localStorage.setItem('CENTRAL_EXAM_RESULTS', JSON.stringify(allResults));
+        console.log('💾 Saved to central storage. Total:', allResults.length);
+        
+    } catch (error) {
+        console.error('❌ Central storage error:', error);
+    }
+}
+
+// ===== QUEUE STATUS DISPLAY =====
+function showQueueStatus(studentResult) {
+    const statusHTML = `
+        <div class="queue-status">
+            <h3 style="margin: 0 0 20px 0; color: #1565c0; font-size: 24px;">
+                ⏳ Submission in Progress
+            </h3>
+            
+            <div style="background: white; padding: 20px; border-radius: 10px; 
+                        margin: 15px 0; border: 1px solid #bbdefb;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left;">
+                    <div><strong>Student:</strong></div>
+                    <div>${studentResult.student_name}</div>
+                    
+                    <div><strong>Roll No:</strong></div>
+                    <div>${studentResult.roll_number}</div>
+                    
+                    <div><strong>Total Marks:</strong></div>
+                    <div style="font-weight: bold; color: #4B0082;">${studentResult.total_marks}</div>
+                    
+                    <div><strong>Status:</strong></div>
+                    <div id="queueStatus" style="color: #FF9800; font-weight: bold;">
+                        Queued for Google Sheets...
+                    </div>
+                </div>
+            </div>
+
+            <div id="submissionProgress" style="margin: 20px 0;">
+                <div class="progress-container">
+                    <div id="progressBar" class="progress-bar" style="width: 10%;"></div>
+                </div>
+                <p id="progressText" style="margin: 10px 0 0 0; font-size: 14px; font-weight: bold;">
+                    Initializing submission...
+                </p>
+            </div>
+
+            <div id="queueInfo" style="font-size: 14px; color: #666; margin-top: 15px;">
+                <!-- Queue stats will appear here -->
+            </div>
+
+            <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 20px;
+                        border: 1px solid #c3e6cb;">
+                <p style="margin: 0; font-weight: bold; color: #155724;">
+                    ✅ Your data is safely stored locally. You can close this window - submission will continue in background.
+                </p>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('queueStatusSection').innerHTML = statusHTML;
+    sheetsQueue.updateQueueDisplay();
+}
+
+window.updateSubmissionProgress = function(progress) {
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    
+    if (progressBar && progressText) {
+        progressBar.style.width = Math.max(10, progress) + '%';
+        
+        if (progress < 30) {
+            progressText.textContent = `Submitting to Google Sheets... ${progress.toFixed(1)}%`;
+            progressText.style.color = '#FF9800';
+        } else if (progress < 70) {
+            progressText.textContent = `Processing... ${progress.toFixed(1)}%`;
+            progressText.style.color = '#2196F3';
+        } else {
+            progressText.textContent = `Finalizing... ${progress.toFixed(1)}%`;
+            progressText.style.color = '#4CAF50';
+        }
+    }
+};
+
+// ===== ADMIN QUEUE FUNCTIONS =====
+function refreshQueueStats() {
+    const stats = sheetsQueue.getQueueStats();
+    const statsHTML = `
+        <div style="text-align: center; background: white; padding: 10px; border-radius: 8px;">
+            <div style="font-size: 12px; color: #666;">Queue Length</div>
+            <div style="font-size: 18px; font-weight: bold; color: ${stats.queueLength > 0 ? '#FF9800' : '#4CAF50'};">${stats.queueLength}</div>
+        </div>
+        <div style="text-align: center; background: white; padding: 10px; border-radius: 8px;">
+            <div style="font-size: 12px; color: #666;">Processed</div>
+            <div style="font-size: 18px; font-weight: bold; color: #28a745;">${stats.totalProcessed}</div>
+        </div>
+        <div style="text-align: center; background: white; padding: 10px; border-radius: 8px;">
+            <div style="font-size: 12px; color: #666;">Failed</div>
+            <div style="font-size: 18px; font-weight: bold; color: #dc3545;">${stats.totalFailed}</div>
+        </div>
+        <div style="text-align: center; background: white; padding: 10px; border-radius: 8px;">
+            <div style="font-size: 12px; color: #666;">Rate Limit</div>
+            <div style="font-size: 18px; font-weight: bold; color: #17a2b8;">${stats.requestsThisMinute}/50</div>
+        </div>
+    `;
+    
+    document.getElementById('liveQueueStats').innerHTML = statsHTML;
+}
+
+function forceProcessQueue() {
+    if (!sheetsQueue.isProcessing && sheetsQueue.queue.length > 0) {
+        sheetsQueue.processQueue();
+        alert('🚀 Queue processing started!');
+    } else {
+        alert(sheetsQueue.isProcessing ? 'Queue is already processing!' : 'Queue is empty!');
+    }
+}
+
+// ===== REMAINING ORIGINAL CODE =====
+// [Include all your original functions here exactly as they were:
+// setupScreenshotProtection, setupKeyboardNavigation, setupModalKeyboardSupport,
+// showError, clearErrors, security measures, identifySubject, preloadQuestionImages,
+// showConfirm, fetch answer key, shuffleArray, prepareExamData, validateStudentInputs,
+// startWithSecurity, startExam, startTimer, renderQuestion, renderOptions, 
+// updateOptionsDisplay, navigation buttons, renderPalette, submitExam, 
+// showSummaryInterface, startWaitingTimer, updateWaitingTimer, startAutoTransition,
+// renderSummaryTable, showReviewInterface, renderDetailedResultsTable, 
+// renderReviewQuestions, and event listeners]
+
+// Due to character limits, I'm showing the integration points.
+// Your existing functions remain exactly the same, just replace the 
+// sendAllSubjectsToGoogleSheet function with the enhanced version above.
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    // Your existing initialization code
+    setupKeyboardNavigation();
+    setupModalKeyboardSupport();
+    
+    document.getElementById('stuSection').addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+
+    // Fetch answer key and initialize
+    fetch('Answers/Key')
+      .then(res => {
+        if (!res.ok) throw new Error('Key file not found or not accessible');
+        return res.text();
+      })
+      .then(text => {
+        answerKey = text.trim().split('\n').map(line => line.trim().split('')).flat();
+        for (let i = 1; i <= answerKey.length; i++) {
+          images.push(`questions/${i}.png`);
+        }
+        keyLoaded = true;
+        clearErrors();
+        validateStudentInputs();
+        console.log('Loaded answer key:', answerKey);
+      })
+      .catch(err => {
+        console.error('Failed to load Answers/Key:', err);
+        showError("Answer key not loaded - exam disabled. Contact administrator.");
+        validateStudentInputs();
+      });
+});
+
+// Admin panel functions
+function showAdminPanel() {
+    document.getElementById('adminPanel').style.display = 'block';
+    updateAdminStats();
+    displayRealTimeTable();
+    refreshQueueStats();
+}
+
+function updateAdminStats() {
+    const allResults = getAllResults();
+    const totalStudents = allResults.length;
+    document.getElementById('totalStudents').textContent = totalStudents;
+    
+    if (totalStudents > 0) {
+        const lastResult = allResults[allResults.length - 1];
+        const lastTime = new Date(lastResult.timestamp).toLocaleTimeString();
+        document.getElementById('lastSubmission').textContent = lastTime;
+    }
+    
+    const dataStr = JSON.stringify(allResults);
+    const sizeKB = (new Blob([dataStr]).size / 1024).toFixed(2);
+    document.getElementById('storageSize').textContent = sizeKB + ' KB';
+}
+
+function getAllResults() {
+    return JSON.parse(localStorage.getItem('CENTRAL_EXAM_RESULTS')) || [];
+}
+
+// Export functions
+function exportAllResultsJSON() {
+    const allResults = getAllResults();
+    if (allResults.length === 0) {
+        alert('No results found!');
+        return;
+    }
+    
+    const exportData = {
+        exam_name: "LFJC Online Examination",
+        export_time: new Date().toISOString(),
+        total_students: allResults.length,
+        results: allResults
+    };
+    
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = `LFJC_Exam_Results_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert(`✅ Exported ${allResults.length} student results as JSON`);
+}
+
+function exportAllResultsCSV() {
+    const allResults = getAllResults();
+    if (allResults.length === 0) {
+        alert('No results found!');
+        return;
+    }
+    
+    let csv = 'Student Name,Section,Roll No,Admission No,Maths,Physics,Chemistry,Total Marks,Time,Date\n';
+    allResults.forEach(result => {
+        csv += `"${result.student_name}","${result.section}","${result.roll_number}","${result.admission_number}",`;
+        csv += `${result.maths_marks},${result.physics_marks},${result.chemistry_marks},${result.total_marks},`;
+        csv += `"${result.exam_time}","${result.timestamp.split('T')[0]}"\n`;
+    });
+    
+    const dataBlob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = `LFJC_Exam_Results_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert(`✅ Exported ${allResults.length} student results as CSV`);
+}
+
+// Display real-time table function
+function displayRealTimeTable() {
+    const allResults = getAllResults();
+    const container = document.getElementById('realTimeTable');
+    
+    if (allResults.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #666;">No results found.</p>';
+        return;
+    }
+    
+    let html = '<table style="width: 100%; border-collapse: collapse; font-size: 14px;">';
+    html += `
+        <thead>
+            <tr style="background: #4B0082; color: white;">
+                <th style="padding: 12px; border: 1px solid #E6E6FA;">S.No</th>
+                <th style="padding: 12px; border: 1px solid #E6E6FA;">Student Name</th>
+                <th style="padding: 12px; border: 1px solid #E6E6FA;">Roll No</th>
+                <th style="padding: 12px; border: 1px solid #E6E6FA;">Section</th>
+                <th style="padding: 12px; border: 1px solid #E6E6FA;">Total</th>
+                <th style="padding: 12px; border: 1px solid #E6E6FA;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+    
+    allResults.slice(-50).reverse().forEach((result, index) => {
+        html += `
+            <tr style="border-bottom: 1px solid #E6E6FA; background: ${index % 2 === 0 ? '#f9f9ff' : 'white'}">
+                <td style="padding: 10px; border: 1px solid #E6E6FA;">${allResults.length - index}</td>
+                <td style="padding: 10px; border: 1px solid #E6E6FA;"><strong>${result.student_name}</strong></td>
+                <td style="padding: 10px; border: 1px solid #E6E6FA;">${result.roll_number}</td>
+                <td style="padding: 10px; border: 1px solid #E6E6FA;">${result.section}</td>
+                <td style="padding: 10px; border: 1px solid #E6E6FA; text-align: center; font-weight: bold;">${result.total_marks}</td>
+                <td style="padding: 10px; border: 1px solid #E6E6FA; text-align: center;">
+                    <span style="color: ${result.submission_method === 'google_sheets' ? '#28a745' : '#ffc107'}; font-weight: bold;">
+                        ${result.submission_method === 'google_sheets' ? '✅ Sheets' : '💾 Local'}
+                    </span>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+// Clear all data function
+function clearAllData() {
+    const allResults = getAllResults();
+    if (allResults.length === 0) {
+        alert('No data to clear!');
+        return;
+    }
+    
+    if (confirm(`Are you sure you want to delete ALL ${allResults.length} student results? This cannot be undone!`)) {
+        localStorage.removeItem('CENTRAL_EXAM_RESULTS');
+        alert('🗑️ All data cleared successfully!');
+        updateAdminStats();
+        displayRealTimeTable();
+    }
+}
+
+// Print function
+function printAllResults() {
+    const allResults = getAllResults();
+    if (allResults.length === 0) {
+        alert('No results to print!');
+        return;
+    }
+    
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>LFJC Exam Results - ${new Date().toLocaleDateString()}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; }
+                    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                    th { background: #4B0082; color: white; }
+                    tr:nth-child(even) { background: #f9f9ff; }
+                    .header { text-align: center; margin-bottom: 30px; }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1>LFJC ONLINE EXAMINATION RESULTS</h1>
+                    <h3>Date: ${new Date().toLocaleDateString()} | Total Students: ${allResults.length}</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Student Name</th>
+                            <th>Roll No</th>
+                            <th>Section</th>
+                            <th>Maths</th>
+                            <th>Physics</th>
+                            <th>Chemistry</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${allResults.map((result, index) => `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${result.student_name}</td>
+                                <td>${result.roll_number}</td>
+                                <td>${result.section}</td>
+                                <td>${result.maths_marks}</td>
+                                <td>${result.physics_marks}</td>
+                                <td>${result.chemistry_marks}</td>
+                                <td><strong>${result.total_marks}</strong></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <div style="margin-top: 30px; text-align: center; font-size: 12px; color: #666;">
+                    Generated on ${new Date().toLocaleString()}
+                </div>
+            </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+}
+</script>
+</body>
+</html>
